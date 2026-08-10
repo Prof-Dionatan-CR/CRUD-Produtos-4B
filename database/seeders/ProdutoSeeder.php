@@ -18,5 +18,17 @@ class ProdutoSeeder extends Seeder
             'preco' => 7000.50,
             'quantidade' => 12,
         ]);
+
+        Produto::create([
+            'nome' => 'Lajota',
+            'preco' => 40,
+            'quantidade' => 80,
+        ]);
+
+        Produto::create([
+            'nome' =>'Erva mate',
+            'preco' => 12.90,
+            'quantidade' => 25,
+        ]);
     }
 }
