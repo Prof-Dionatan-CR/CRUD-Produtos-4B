@@ -8,10 +8,20 @@
 </head>
 <body>
     <a href="{{ route('produtos.create') }}">Criar novo Produto</a>
+
+    @if (session('success'))
+        <p style="color: green">{{ session('success') }}</p>
+    @endif
+
     @foreach ($produtos as $produto)
         <p>Nome: {{ $produto->nome }}</p>
         <p>Preço: R${{ $produto->preco }}</p>
-        <p>Categoria: {{ $produto->categoria->nome }}</p>   
+        <p>Categoria: {{ $produto->categoria->nome }}</p> 
+        <a href="{{ route('produtos.edit', $produto) }}">Editar</a> 
+        <form action="{{ route('produtos.destroy', $produto) }}" method="POST">
+            @method('DELETE')
+            <button type="submit">Deleter</button>
+        </form>
         <hr>    
     @endforeach
 </body>

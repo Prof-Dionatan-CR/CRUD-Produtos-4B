@@ -7,15 +7,6 @@ Route::get('/', function () {
     return redirect("produtos");
 });
 
-
-Route::prefix('produtos')
-->name('produtos.')
-->group( function(){
-
-Route::get('/', [ProdutoController::class, 'index'])->name('index');
-// Rotas de CRUD
-Route::get('/create', [ProdutoController::class, 'create'])->name('create');
-Route::post('/', [ProdutoController::class, 'store'])->name('store');
-
-});
+// Cria as 7 rotas do CRUD
+Route::resource('/produtos', ProdutoController::class);
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProdutoRequest;
 use App\Models\Categoria;
 use App\Models\Produto;
 use Illuminate\Http\Request;
@@ -22,19 +23,34 @@ class ProdutoController extends Controller
         compact('produto', 'categorias'));
     }
 
-    public function store(Request $request){
+    public function store(ProdutoRequest $request){
         // Validar os dados
-        $dados = $request->validate(
-            [
-                'nome' => 'required|string|max:255',
-                'preco' => ['required', 'numeric', 'min:0'], // forma atual
-                'quantidade' => 'required|integer|min:0',
-                "categoria_id" => 'required|integer|exists:categorias,id',
-            ]
-        );
-        echo 'Até aqui tudo bem';
+        $dados = $request->validated();
 
         Produto::create($dados);
-        return redirect()->route('produtos.index');
+        return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso!');
+    }
+
+    public function edit(Produto $produto){
+        $categorias = Categoria::all();
+
+        return view('produtos.edit', 
+        compact('produto', 'categorias'));
+    }
+
+    public function update(ProdutoRequest $request, Produto $produto){
+        $dados = $request->validated();
+        $produto->update($dados);
+
+        return redirect()->route('produtos.index')->with('success', 'Produto alterado com sucesso!');
+    }
+
+    public function destroy(Produto $produto){
+        $produto->delete();
+        return redirect()->route('produtos.index')->with('success', 'Produto excluído com sucesso!');
+    }
+
+    public function show(Produto $produto){
+        return view('produtos.show', compact('produto'));
     }
 }
