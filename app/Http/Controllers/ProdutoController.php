@@ -6,6 +6,7 @@ use App\Http\Requests\ProdutoRequest;
 use App\Models\Categoria;
 use App\Models\Produto;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Gate;
 
 class ProdutoController extends Controller
 {
@@ -16,6 +17,9 @@ class ProdutoController extends Controller
     }
 
     public function create(){
+
+        Gate::authorize('create', Produto::class);
+
         $categorias = Categoria::all();
         $produto = new Produto();
 
@@ -24,14 +28,23 @@ class ProdutoController extends Controller
     }
 
     public function store(ProdutoRequest $request){
+        
+        Gate::authorize('create', Produto::class);
         // Validar os dados
         $dados = $request->validated();
 
-        Produto::create($dados);
+
+        $produto = new Produto($dados);
+        $produto->user_id = auth()->id();
+        $produto->save();
+
         return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso!');
     }
 
     public function edit(Produto $produto){
+
+        Gate::authorize('edit', $produto);
+
         $categorias = Categoria::all();
 
         return view('produtos.edit', 
@@ -39,6 +52,9 @@ class ProdutoController extends Controller
     }
 
     public function update(ProdutoRequest $request, Produto $produto){
+
+        Gate::authorize('edit', $produto);
+
         $dados = $request->validated();
         $produto->update($dados);
 
@@ -46,6 +62,8 @@ class ProdutoController extends Controller
     }
 
     public function destroy(Produto $produto){
+        Gate::authorize('delete', $produto);
+
         $produto->delete();
         return redirect()->route('produtos.index')->with('success', 'Produto excluído com sucesso!');
     }

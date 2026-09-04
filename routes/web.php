@@ -17,7 +17,18 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('/produtos', ProdutoController::class);
+    Route::get('/produtos', [ProdutoController::class, 'index'])
+    ->name('produtos.index');
+
+    Route::middleware('admin')->group(function(){
+        Route::resource('/produtos', ProdutoController::class)
+        ->except('index', 'show');
+    });
+
+    Route::get('/produtos/{produto}', [ProdutoController::class, 'show'])
+    ->name('produtos.show');
+
+    // 
 });
 
 require __DIR__.'/auth.php';
