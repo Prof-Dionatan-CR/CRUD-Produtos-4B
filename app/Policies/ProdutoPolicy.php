@@ -6,7 +6,7 @@ use App\Enums\UserRole;
 use App\Models\Produto;
 use App\Models\User;
 
-class UserPolicy
+class ProdutoPolicy
 {
     /**
      * Create a new policy instance.
