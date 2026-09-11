@@ -36,7 +36,7 @@ class ProdutoController extends Controller
 
         $produto = new Produto($dados);      // Criação do produto
         $produto->user_id = auth()->id();   // Id de quem está autenticado
-        $produto->save;
+        $produto->save();
 
         return redirect()->route('produtos.index')->with('success', 'Produto criado com sucesso!');
     }
